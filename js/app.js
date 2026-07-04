@@ -23,6 +23,25 @@ function buildShell() {
         <div id="header-right"></div>
       </header>
 
+      <nav class="topseg" role="navigation" aria-label="화면 전환">
+        <a class="topseg__item" href="#home" data-tab="home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5 12 3l9 7.5"/>
+            <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+          </svg>
+          <span>홈 · 신고하기</span>
+        </a>
+        <a class="topseg__item" href="#stats" data-tab="stats">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 20V10"/>
+            <path d="M10 20V4"/>
+            <path d="M16 20v-8"/>
+            <path d="M22 20H2"/>
+          </svg>
+          <span>통계 보기</span>
+        </a>
+      </nav>
+
       <main id="main" class="main" tabindex="-1">
         <div id="view-root"></div>
       </main>

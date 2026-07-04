@@ -260,6 +260,55 @@ a { color: var(--primary); text-underline-offset: 2px; }
   gap: var(--sp-md);
 }
 
+/* --- Top segment tabs (sticky, always-visible screen switch) ------------ */
+.topseg {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 9;
+  display: flex;
+  gap: 8px;
+  padding: 10px var(--sp-md);
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.topseg__item {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--surface-1);
+  color: var(--ink-muted);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+.topseg__item svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.topseg__item:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.topseg__item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.topseg__item.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
 /* --- Tabbar ------------------------------------------------------------- */
 .tabbar {
   position: fixed;
@@ -305,8 +354,22 @@ a { color: var(--primary); text-underline-offset: 2px; }
 }
 .tabbar__item:hover { color: var(--ink); }
 .tabbar__item:hover .icon { color: var(--ink-muted); }
-.tabbar__item.is-active { color: var(--ink); }
+.tabbar__item.is-active {
+  color: var(--primary);
+  font-weight: 700;
+}
 .tabbar__item.is-active .icon { color: var(--primary); }
+.tabbar__item.is-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 3px 3px;
+}
+.tabbar__item { position: relative; }
 .tabbar__item:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;
