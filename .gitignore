@@ -1,0 +1,21 @@
+# Firebase config is committed on purpose so GitHub Pages deploys with
+# credentials attached. Firebase apiKey is exposed to clients by design;
+# access control lives in firestore.rules. Domain whitelist in Firebase
+# Console (Authentication → Settings → Authorized domains) mitigates abuse.
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Local dev logs
+*.log
+firebase-debug.log
+firestore-debug.log
+
+# Node / build outputs (unlikely here but harmless)
+node_modules/
+dist/
