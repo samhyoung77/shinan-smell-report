@@ -17,7 +17,7 @@ export function mountDatePicker(container, { value, onChange } = {}) {
   container.innerHTML = `
     <button type="button"
             class="date-pill ${current === today ? '' : 'date-pill--past'}"
-            aria-label="신고 날짜 선택. 현재 ${current === today ? '오늘' : formatKorMD(current)}">
+            aria-label="등록 날짜 선택. 현재 ${current === today ? '오늘' : formatKorMD(current)}">
       <span aria-hidden="true">🗓</span>
       <span class="date-pill__label">${current === today ? '오늘' : formatKorMD(current)}</span>
     </button>
@@ -57,7 +57,7 @@ export function mountDatePicker(container, { value, onChange } = {}) {
     btn.classList.toggle('date-pill--past', !isToday);
     label.textContent = isToday ? '오늘' : formatKorMD(current);
     btn.setAttribute('aria-label',
-      `신고 날짜 선택. 현재 ${isToday ? '오늘' : formatKorMD(current)}`);
+      `등록 날짜 선택. 현재 ${isToday ? '오늘' : formatKorMD(current)}`);
   }
 
   return {

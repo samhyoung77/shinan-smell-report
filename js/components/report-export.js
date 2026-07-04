@@ -181,7 +181,7 @@ function openPrint(reports, { from, to, rangeLabel }) {
   <h1>효천마을 신안인스빌 똥냄새 피해현황</h1>
   <div class="meta">기간: ${esc(rangeLabel)} (${esc(from)} ~ ${esc(to)})</div>
   <div class="kpi">
-    <div><strong>${total}</strong>총 신고 건수</div>
+    <div><strong>${total}</strong>총 등록 건수</div>
     <div><strong>${avg}</strong>평균 강도</div>
     <div><strong>${new Date().toLocaleDateString('ko-KR')}</strong>발행일</div>
   </div>
@@ -192,7 +192,7 @@ function openPrint(reports, { from, to, rangeLabel }) {
       ${perBuilding.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.complex)}</td><td>${r.count}</td><td>${r.avg}</td></tr>`).join('')}
     </tbody>
   </table>
-  <h2>전체 신고 내역</h2>
+  <h2>전체 등록 내역</h2>
   <table>
     <thead><tr><th>날짜</th><th>동</th><th>단지</th><th>강도</th><th>메모</th><th>기록시각</th></tr></thead>
     <tbody>${rows || '<tr><td colspan="6" style="text-align:center;color:#888">데이터 없음</td></tr>'}</tbody>

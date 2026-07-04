@@ -30,7 +30,7 @@ export function renderMap(container, { selectedId = null, counts = new Map(), on
          data-building-id="${b.id}"
          role="button"
          tabindex="0"
-         aria-label="${esc(b.name)} 선택${count > 0 ? `, 신고 ${count}건` : ''}${isSel ? ', 선택됨' : ''}">
+         aria-label="${esc(b.name)} 선택${count > 0 ? `, 등록 ${count}건` : ''}${isSel ? ', 선택됨' : ''}">
         <circle class="b-circle" cx="${b.cx}" cy="${b.cy}" r="${b.r}"></circle>
         <text class="b-label" x="${b.cx}" y="${b.cy}">${esc(b.name)}</text>
         ${badge}
@@ -45,7 +45,7 @@ export function renderMap(container, { selectedId = null, counts = new Map(), on
         <svg class="map-svg"
              viewBox="0 0 ${W} ${H}"
              role="img"
-             aria-label="효천마을 신안인스빌 지도. 동을 골라 신고할 수 있어요.">
+             aria-label="효천마을 신안인스빌 지도. 동을 골라 등록할 수 있어요.">
           ${svg}
         </svg>
       </div>

@@ -57,7 +57,7 @@ export function renderHeatmap(container, { reports, dates, view = 'building' }) 
   container.innerHTML = `
     <div class="heatmap">
       <div class="heatmap__scroll">
-        <div class="heatmap__grid" style="grid-template-columns: ${cols};" role="grid" aria-label="동별 신고 히트맵">
+        <div class="heatmap__grid" style="grid-template-columns: ${cols};" role="grid" aria-label="동별 등록 히트맵">
           ${headerCells}
           ${bodyRows}
         </div>

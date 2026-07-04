@@ -1,4 +1,4 @@
-// home.js — 지도 신고 화면
+// home.js — 지도 등록 화면
 import { getReports, reportSmell, myReports, deleteReport } from '../data.js';
 import { findBuilding } from '../buildings.js';
 import { renderMap } from '../components/map-overlay.js';
@@ -167,7 +167,7 @@ function updateCta() {
     const existingBadge = cta.querySelector('.cta__badge');
     if (existingBadge) existingBadge.remove();
   } else {
-    label.textContent = `${formatKorMD(state.date)} 신고하기`;
+    label.textContent = `${formatKorMD(state.date)} 등록하기`;
     if (!cta.querySelector('.cta__badge')) {
       const b = document.createElement('span');
       b.className = 'cta__badge';
@@ -182,7 +182,7 @@ function updateRecent() {
   const el = document.querySelector('#recent-line');
   if (!el) return;
   if (!state.reports.length) {
-    el.innerHTML = '<span style="color:var(--ink-subtle)">이 지도의 첫 신고자가 되어보세요</span>';
+    el.innerHTML = '<span style="color:var(--ink-subtle)">이 지도의 첫 등록자가 되어보세요</span>';
     return;
   }
   const sorted = state.reports.slice().sort((a, b) => b.ts.localeCompare(a.ts));
@@ -190,18 +190,18 @@ function updateRecent() {
   const b = findBuilding(latest.buildingId);
   const mineIds = new Set(myReports().map(m => m.id));
   const isMine = mineIds.has(latest.id);
-  el.innerHTML = `최근 신고: ${esc(relativeKor(latest.ts))} · ${esc(b ? b.name : latest.buildingId)}` +
-    (isMine ? ` <button type="button" class="link-btn" id="cancel-latest" data-id="${esc(latest.id)}">내 신고 취소</button>` : '');
+  el.innerHTML = `최근 등록: ${esc(relativeKor(latest.ts))} · ${esc(b ? b.name : latest.buildingId)}` +
+    (isMine ? ` <button type="button" class="link-btn" id="cancel-latest" data-id="${esc(latest.id)}">내 등록 취소</button>` : '');
   const btn = el.querySelector('#cancel-latest');
   if (btn) btn.addEventListener('click', () => onCancel(btn.dataset.id));
 }
 
 async function onCancel(id) {
   if (!id) return;
-  if (!confirm('방금 남긴 신고를 취소할까요?')) return;
+  if (!confirm('방금 남긴 등록를 취소할까요?')) return;
   try {
     await deleteReport(id);
-    showToast('신고를 취소했어요.', { kind: 'success' });
+    showToast('등록를 취소했어요.', { kind: 'success' });
     state.reports = await getReports({});
     const root = document.getElementById('view-root');
     if (root) {
@@ -238,7 +238,7 @@ async function onSubmit(root) {
       intensity: state.intensity,
       clientDate: state.date,
     });
-    showToast('신고가 접수됐어요. 감사합니다.', { kind: 'success' });
+    showToast('등록가 접수됐어요. 감사합니다.', { kind: 'success' });
     // reset intensity only; keep building/date
     state.intensity = null;
     root.querySelectorAll('.intensity__btn').forEach(b => b.setAttribute('aria-checked', 'false'));

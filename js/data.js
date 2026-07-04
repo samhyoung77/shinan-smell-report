@@ -246,7 +246,7 @@ export async function deleteReport(id) {
   if (!id) throw new Error('id required');
   const mine = pruneMy(loadMy());
   const entry = mine.find(r => r.id === id);
-  if (!entry) throw new Error('그 신고는 이 기기에서 작성한 게 아니에요.');
+  if (!entry) throw new Error('그 등록는 이 기기에서 작성한 게 아니에요.');
 
   if (!firestoreReady) {
     const state = loadStub();
