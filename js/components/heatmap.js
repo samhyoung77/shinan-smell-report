@@ -22,14 +22,25 @@ export function renderHeatmap(container, { reports, dates, view = 'building' }) 
         buildingIds: [b.id],
       }));
 
-  // Total columns = 1 (label) + dates.length
-  const cols = `68px repeat(${dates.length}, minmax(24px, 1fr))`;
+  // 뷰별 컬럼 폭 & 라벨 규칙
+  const isYearView  = dates.length > 60;
+  const cellMin     = isYearView ? '10px' : '24px';
+  const cols        = `68px repeat(${dates.length}, minmax(${cellMin}, 1fr))`;
 
   const headerCells = [
     `<div class="heatmap__col-header heatmap__col-header--label" aria-hidden="true"></div>`,
     ...dates.map(d => {
-      const short = d.slice(5).replace('-', '/'); // MM/DD
-      return `<div class="heatmap__col-header" title="${d}">${short}</div>`;
+      const month = Number(d.slice(5, 7));
+      const day   = Number(d.slice(8, 10));
+      let label;
+      if (isYearView) {
+        // 올해 뷰: 매월 1일에만 월 숫자만 (예: '7'). 나머지는 빈 라벨.
+        label = day === 1 ? String(month) : '';
+      } else {
+        // 30일/7일 뷰: 기본은 일만, 매월 1일엔 'M/1'로 월 경계 표시.
+        label = day === 1 ? `${month}/1` : String(day);
+      }
+      return `<div class="heatmap__col-header" title="${d}">${label}</div>`;
     }),
   ].join('');
 

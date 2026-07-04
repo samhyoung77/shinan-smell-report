@@ -60,7 +60,7 @@ export async function renderStats(root) {
     if (!allReports.length) {
       heatmapSlot.innerHTML = `
         <div class="empty-state">
-          아직 등록가 없어요. <a href="#home" data-nav="home">홈</a>에서 첫 등록를 남겨보세요.
+          아직 등록이 없어요. <a href="#home" data-nav="home">홈</a>에서 첫 등록을 남겨보세요.
         </div>`;
       const link = heatmapSlot.querySelector('[data-nav]');
       link && link.addEventListener('click', ev => { ev.preventDefault(); go('home'); });
@@ -124,10 +124,10 @@ function renderMy(slot, reload) {
   slot.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.dataset.cancel;
-      if (!confirm('이 등록를 취소할까요?')) return;
+      if (!confirm('이 등록을 취소할까요?')) return;
       try {
         await deleteReport(id);
-        showToast('등록를 취소했어요.', { kind: 'success' });
+        showToast('취소 되었습니다.', { kind: 'success' });
         await reload();
       } catch (err) {
         console.error(err);

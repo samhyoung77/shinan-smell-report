@@ -700,16 +700,16 @@ a { color: var(--primary); text-underline-offset: 2px; }
   overflow: hidden;
 }
 .heatmap__scroll {
+  /* wrapper only; scroll happens on .heatmap__grid so sticky grid items work */
+}
+.heatmap__grid {
+  display: grid;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
-.heatmap__grid {
-  display: grid;
-  min-width: 100%;
-}
 .heatmap__cell {
-  min-width: 24px;
+  min-width: 0;  /* grid template controls; row label z-index stays on top */
   min-height: 24px;
   border: 1px solid var(--cell-0-border);
   border-radius: 3px;
@@ -737,7 +737,8 @@ a { color: var(--primary); text-underline-offset: 2px; }
   display: flex;
   align-items: center;
   min-width: 68px;
-  z-index: 1;
+  z-index: 3;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.04);
 }
 .heatmap__col-header {
   padding: 4px 2px;
@@ -745,14 +746,15 @@ a { color: var(--primary); text-underline-offset: 2px; }
   color: var(--ink-subtle);
   text-align: center;
   border-bottom: 1px solid var(--hairline);
-  min-width: 24px;
+  min-width: 0;  /* grid template controls */
+  white-space: nowrap;
 }
 .heatmap__col-header--label {
   border-right: 1px solid var(--hairline);
   background: var(--surface-1);
   position: sticky;
   left: 0;
-  z-index: 2;
+  z-index: 4;
 }
 .legend {
   display: flex;

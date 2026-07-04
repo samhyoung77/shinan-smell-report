@@ -19,3 +19,6 @@ firestore-debug.log
 # Node / build outputs (unlikely here but harmless)
 node_modules/
 dist/
+
+# Firebase CLI cache
+.firebase/

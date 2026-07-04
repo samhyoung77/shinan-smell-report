@@ -198,10 +198,10 @@ function updateRecent() {
 
 async function onCancel(id) {
   if (!id) return;
-  if (!confirm('방금 남긴 등록를 취소할까요?')) return;
+  if (!confirm('방금 남긴 등록을 취소할까요?')) return;
   try {
     await deleteReport(id);
-    showToast('등록를 취소했어요.', { kind: 'success' });
+    showToast('취소 되었습니다.', { kind: 'success' });
     state.reports = await getReports({});
     const root = document.getElementById('view-root');
     if (root) {
@@ -238,7 +238,7 @@ async function onSubmit(root) {
       intensity: state.intensity,
       clientDate: state.date,
     });
-    showToast('등록가 접수됐어요. 감사합니다.', { kind: 'success' });
+    showToast('등록됐어요. 감사합니다.', { kind: 'success' });
     // reset intensity only; keep building/date
     state.intensity = null;
     root.querySelectorAll('.intensity__btn').forEach(b => b.setAttribute('aria-checked', 'false'));
