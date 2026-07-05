@@ -120,3 +120,21 @@ export const MAP_IMAGE = { src: 'assets/map.jpg', naturalWidth: 2278, naturalHei
 4. **QA** — 이미지 맵 히트 영역 정확도, 날짜 선택기, CSV 다운로드 검증
 
 ## STATUS: READY_FOR_RE_RUN
+
+---
+
+## 통계 화면 개선 요청 (2026-07-05)
+
+**요청:** 등록된 자료로 **일간 추세 그래프**를 신규 추가. 기존 동별/단지별 히트맵은 유지.
+
+**확정 컨텍스트 (오케스트레이터가 사전 조사):**
+- Report shape: `{ id, buildingId, intensity(1~3 정수), clientDate('YYYY-MM-DD'), ts(ISO) }`
+- 데이터 소스: `js/data.js`의 `getReports({})` (전체) → stats.js에서 range로 필터
+- 재사용 유틸(js/util.js): `lastNDays(n)`, `fromYMD/toYMD`, `avgIntensity`, `cellLevel`, `formatKorMD`, `esc`
+- stats.js 상태: `s.range`('7'|'30'|'year'), `s.view`('building'|'complex'). range 셀렉트/뷰 토글과 연동 필요.
+- 배치: `#kpi-slot` → `#my-slot` → 툴바 → **[신규] 추세 그래프** → `#heatmap-slot` → 내보내기. (추세 그래프는 히트맵 위 = 툴바 아래가 자연스러움)
+- 디자인 토큰: 방금 추가된 `--mono`(수치), 강도색 `--intensity-1/2/3`, 히트맵 셀색 `--cell-1/2/3-bg`, surface 라더, `--primary`. 라벤더는 액센트로만.
+- 빌드도구 없음, Vanilla JS, ES 모듈. 차트 라이브러리 금지 → 순수 SVG 또는 CSS 바 권장.
+- 접근성: 색만이 아닌 라벨/수치 병기 (기존 규칙 유지).
+
+**부분 재실행 범위:** 디자인 → 프론트엔드 → QA. Firestore(Phase 3) 미변경 → 건너뜀.

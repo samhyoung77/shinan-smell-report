@@ -54,6 +54,10 @@
   --primary-tint-15: rgba(94,106,210,0.15);
   --primary-tint-20: rgba(94,106,210,0.20);
 
+  /* Water (개울) — 정보성 파랑. 브랜드 라벤더와 구분. */
+  --water:    #2b6fa8;
+  --water-hi: #5aa0d8;
+
   /* Shape */
   --r-xs: 4px;
   --r-sm: 6px;
@@ -79,6 +83,9 @@
   --dur-fast: 120ms;
   --dur-med:  200ms;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Mono (수치·데이터용 고정폭) */
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Consolas, 'Menlo', monospace;
 }
 
 /* --- Light palette (auto system) ---------------------------------------- */
@@ -120,6 +127,9 @@
 
     --primary-tint-15: rgba(94,106,210,0.14);
     --primary-tint-20: rgba(94,106,210,0.22);
+
+    --water:    #4aa3e0;
+    --water-hi: #8fcbf2;
   }
 }
 
@@ -428,34 +438,82 @@ a { color: var(--primary); text-underline-offset: 2px; }
   font-size: 12px;
 }
 
-/* --- SVG map ------------------------------------------------------------ */
+/* --- SVG map (광역 조망 + 줌/팬) --------------------------------------- */
 .map-wrap {
   position: relative;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  aspect-ratio: 2039 / 1025;
+  max-height: 62vh;
+  min-height: 240px;
+  overflow: hidden;
   background: var(--canvas);
+  touch-action: none;          /* 브라우저 기본 팬/줌 제스처 무효화 */
+  -webkit-user-select: none;
+  user-select: none;
 }
 .map-inner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2278 / 937;
-  min-width: 600px; /* prevent buildings being too small on mobile */
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;       /* 줌/팬 기준점 */
+  will-change: transform;
+  touch-action: none;
 }
-.map-inner img {
+/* 벡터 개략도 배경 — 오버레이와 동일 위치/크기로 겹침. 토큰 사용 → 테마 자동 대응. */
+.map-bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
   user-select: none;
   -webkit-user-drag: none;
-  filter: brightness(0.9);
+  pointer-events: none; /* 상호작용은 위 .map-svg 오버레이가 담당 */
 }
-@media (prefers-color-scheme: light) {
-  .map-inner img { filter: none; }
+.bg-ground { fill: var(--surface-2); }
+.bg-block {
+  fill: var(--surface-3);
+  stroke: var(--hairline-strong);
+  stroke-width: 3;
+}
+.bg-road {
+  fill: none;
+  stroke: var(--hairline);
+  stroke-width: 34;
+  stroke-linecap: round;
+}
+.bg-road-label {
+  fill: var(--ink-subtle);
+  font-size: 34px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.bg-water {
+  fill: none;
+  stroke: var(--water);
+  stroke-width: 155;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bg-water-hi {
+  fill: none;
+  stroke: var(--water-hi);
+  stroke-width: 26;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+}
+.bg-water-arrow { fill: var(--water-hi); }
+.bg-water-label {
+  fill: var(--water-hi);
+  font-size: 48px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: var(--surface-2);
+  stroke-width: 5;
+  stroke-linejoin: round;
 }
 .map-svg {
   position: absolute;
@@ -511,6 +569,41 @@ a { color: var(--primary); text-underline-offset: 2px; }
   text-anchor: middle;
   dominant-baseline: central;
 }
+
+/* 줌 컨트롤(우하단) — .map-inner 밖이라 스케일되지 않음. */
+.map-zoom {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 2;
+}
+.map-zoom__btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline-strong);
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.map-zoom__btn:hover { background: var(--surface-2); }
+.map-zoom__btn:active { background: var(--surface-3); }
+.map-zoom__btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.map-zoom__btn--reset { font-size: 18px; }
 
 /* --- Home: selected + intensity ---------------------------------------- */
 .selection-line {
@@ -663,6 +756,7 @@ a { color: var(--primary); text-underline-offset: 2px; }
   align-items: flex-start;
 }
 .kpi__num {
+  font-family: var(--mono);
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.6px;
@@ -673,6 +767,14 @@ a { color: var(--primary); text-underline-offset: 2px; }
 .kpi__label {
   font-size: 12px;
   color: var(--ink-muted);
+}
+/* '이번 주'(2번째)를 elevation + 라벤더로 강조 — 핵심 수치 */
+.kpi__card:nth-child(2) {
+  background: var(--surface-2);
+  border-color: var(--hairline-strong);
+}
+.kpi__card:nth-child(2) .kpi__num {
+  color: var(--primary);
 }
 
 /* --- Stats toolbar ------------------------------------------------------ */
@@ -690,6 +792,83 @@ a { color: var(--primary); text-underline-offset: 2px; }
   padding: 8px 12px;
   font-size: 13px;
   min-height: 36px;
+}
+
+/* --- Stats: Trend chart ------------------------------------------------- */
+.trend-card {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-md);
+}
+.trend-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-xs);
+}
+.trend-card__head .eyebrow { margin: 0; }
+.trend__legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.trend__lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.trend__lg .sw {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+/* 범례 스와치는 막대와 동일한 강도 원색(솔리드) */
+.trend__lg .sw.i1 { background: var(--intensity-1); }
+.trend__lg .sw.i2 { background: var(--intensity-2); }
+.trend__lg .sw.i3 { background: var(--intensity-3); }
+.trend__readout {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 0 0 var(--sp-xs);
+  min-height: 1.2em;
+  font-variant-numeric: tabular-nums;
+}
+.trend__plot {
+  width: 100%;
+  line-height: 0; /* svg 하단 여백 제거 */
+}
+.trend__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: pan-y;
+}
+.trend__hit {
+  cursor: pointer;
+  outline: none;
+}
+.trend__hit:focus-visible {
+  outline: 2px solid var(--primary-focus);
+  outline-offset: -2px;
+}
+/* MODE A: active 막대 밝기 강조 */
+.trend__day.is-active rect {
+  filter: brightness(1.18);
+}
+.trend-empty {
+  text-align: center;
+  padding: 24px 12px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin: 0;
 }
 
 /* --- Heatmap ------------------------------------------------------------ */
@@ -742,6 +921,7 @@ a { color: var(--primary); text-underline-offset: 2px; }
 }
 .heatmap__col-header {
   padding: 4px 2px;
+  font-family: var(--mono);
   font-size: 10px;
   color: var(--ink-subtle);
   text-align: center;
@@ -774,6 +954,111 @@ a { color: var(--primary); text-underline-offset: 2px; }
 .legend__sw.lv-1 { background: var(--cell-1-bg); border-color: var(--cell-1-border); }
 .legend__sw.lv-2 { background: var(--cell-2-bg); border-color: var(--cell-2-border); }
 .legend__sw.lv-3 { background: var(--cell-3-bg); border-color: var(--cell-3-border); }
+
+/* --- Stats: Exposure heatmap ------------------------------------------- */
+.exposure-card {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-md);
+}
+.exposure-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-sm);
+}
+.exposure-card__head .eyebrow { margin: 0; }
+.exposure__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-subtle);
+  white-space: nowrap;
+}
+.exposure__scale {
+  display: inline-flex;
+  gap: 2px;
+}
+.exposure__scale i {
+  width: 12px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.exposure__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.exposure__row {
+  display: grid;
+  grid-template-columns: 18px minmax(48px, auto) 1fr auto;
+  align-items: center;
+  gap: var(--sp-xs);
+}
+.exposure__rank {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-subtle);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.exposure__label {
+  font-size: 13px;
+  color: var(--ink);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.exposure__row.is-empty .exposure__label,
+.exposure__row.is-empty .exposure__count { color: var(--ink-subtle); }
+.exposure__badge {
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 999px;
+  color: var(--primary);
+  background: var(--primary-tint-15);
+  white-space: nowrap;
+}
+.exposure__row.is-top .exposure__label { font-weight: 600; }
+.exposure__bar {
+  position: relative;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+}
+.exposure__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  min-width: 2px;
+  border-radius: 3px;
+}
+.exposure__row.is-empty .exposure__fill { min-width: 0; }
+.exposure__count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.exposure__empty {
+  text-align: center;
+  padding: 24px 12px;
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin: 0;
+}
 
 .empty-state {
   text-align: center;
