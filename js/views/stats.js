@@ -3,6 +3,8 @@ import { getReports, myReports, deleteReport } from '../data.js';
 import { findBuilding } from '../buildings.js';
 import { renderKPI } from '../components/kpi.js';
 import { renderHeatmap } from '../components/heatmap.js';
+import { renderTrend } from '../components/trend-chart.js';
+import { renderExposure } from '../components/exposure-heatmap.js';
 import { openReportSheet } from '../components/report-export.js';
 import { computeKPI, lastNDays, relativeKor, esc } from '../util.js';
 import { showToast } from '../toast.js';
@@ -33,6 +35,10 @@ export async function renderStats(root) {
         </select>
       </div>
 
+      <div id="trend-slot"></div>
+
+      <div id="exposure-slot"></div>
+
       <div id="heatmap-slot"></div>
 
       <button type="button" class="btn-secondary" id="export-btn">
@@ -43,6 +49,8 @@ export async function renderStats(root) {
 
   const kpiSlot = root.querySelector('#kpi-slot');
   const mySlot = root.querySelector('#my-slot');
+  const trendSlot = root.querySelector('#trend-slot');
+  const exposureSlot = root.querySelector('#exposure-slot');
   const heatmapSlot = root.querySelector('#heatmap-slot');
 
   const load = async () => {
@@ -58,6 +66,9 @@ export async function renderStats(root) {
     const scoped = allReports.filter(r => r.clientDate >= from && r.clientDate <= to);
 
     if (!allReports.length) {
+      // 전체 0건: 추세/노출 카드는 렌더하지 않고(홈 유도 중복 방지) 히트맵 슬롯만 안내.
+      trendSlot.innerHTML = '';
+      exposureSlot.innerHTML = '';
       heatmapSlot.innerHTML = `
         <div class="empty-state">
           아직 등록이 없어요. <a href="#home" data-nav="home">홈</a>에서 첫 등록을 남겨보세요.
@@ -66,6 +77,8 @@ export async function renderStats(root) {
       link && link.addEventListener('click', ev => { ev.preventDefault(); go('home'); });
       return;
     }
+    renderTrend(trendSlot, { reports: scoped, dates });
+    renderExposure(exposureSlot, { reports: scoped, dates, view: s.view });
     renderHeatmap(heatmapSlot, { reports: scoped, dates, view: s.view });
   };
 
