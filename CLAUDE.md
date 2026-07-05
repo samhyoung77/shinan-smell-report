@@ -4,7 +4,7 @@
 
 - **프론트엔드:** 정적 HTML/CSS/Vanilla JS, 빌드 도구 없음
 - **백엔드:** Firebase Firestore (완전 익명, 로그인 없음)
-- **배포:** GitHub Pages (공유 URL)
+- **배포:** Firebase Hosting (커스텀 도메인 `apt.samsamsam.org`)
 
 ---
 

@@ -2,7 +2,7 @@
 
 집 앞 개울가에서 나는 악취를 익명으로 등록하고, 단지·동별로 언제 어디서 냄새가 발생했는지를 통계로 비교해 볼 수 있는 모바일 웹앱.
 
-**공개 URL:** https://samhyoung77.github.io/shinan-smell-report/
+**공개 URL:** https://apt.samsamsam.org/
 
 ## 사용법
 
@@ -36,7 +36,7 @@
 - **디자인:** [Linear Design System](https://linear.app) 기반 다크 미니멀 (참고: [awesome-design-md](https://github.com/voltagent/awesome-design-md))
 - **폰트:** Jua (Google Fonts)
 - **백엔드:** Firebase Firestore (완전 익명, 서버리스)
-- **호스팅:** GitHub Pages
+- **호스팅:** Firebase Hosting (커스텀 도메인 `apt.samsamsam.org`)
 - **아키텍처:** [Harness](https://github.com/revfactory/harness) 에이전트 팀 파이프라인(디자인→프론트엔드→Firestore→QA)으로 구축
 
 ## 데이터 & 보안

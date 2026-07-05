@@ -56,7 +56,7 @@ export const firebaseConfig = {
 
 ## 6. (선택) 인증된 도메인 관리
 
-콘솔 → **Authentication → Settings → 승인된 도메인**에 배포 도메인(예: `<username>.github.io`)이 이미 목록에 있는지 확인. 이 앱은 Auth를 쓰지 않으므로 필수는 아니지만, 오남용 방지 목적으로 화이트리스트 관리를 권장합니다.
+콘솔 → **Authentication → Settings → 승인된 도메인**에 배포 도메인(예: `apt.samsamsam.org`)이 이미 목록에 있는지 확인. 이 앱은 Auth를 쓰지 않으므로 필수는 아니지만, 오남용 방지 목적으로 화이트리스트 관리를 권장합니다.
 
 ## 7. 로컬 테스트
 
@@ -76,11 +76,15 @@ npx serve .
 
 `[firebase] ... running in localStorage stub mode` 메시지가 뜨면 config가 없거나 placeholder가 남아있는 상태입니다.
 
-## 8. 배포 (GitHub Pages)
+## 8. 배포 (Firebase Hosting)
 
-이 저장소를 GitHub Pages로 그대로 서빙하면 됩니다. 단, `js/firebase-config.js`는 gitignore되어 있으므로 **배포 브랜치에는 별도로 커밋**하거나 배포 워크플로에서 시크릿으로 주입해야 합니다.
+이 저장소는 Firebase Hosting으로 서빙합니다 (커스텀 도메인 `apt.samsamsam.org`). 프로젝트 루트에서:
 
-간단한 방법: 배포용 브랜치를 만들고 `.gitignore`에서 이 한 줄만 임시로 제거한 뒤 커밋. `apiKey`는 비밀이 아니지만, 도메인 화이트리스트를 관리하면 남용을 억제할 수 있습니다.
+```bash
+firebase deploy --only hosting
+```
+
+`firebase.json`의 `public`이 `.`이고 문서/작업 파일은 `ignore` 목록으로 제외됩니다. `js/firebase-config.js`는 gitignore되어 있으나 Hosting 배포 산출물에는 포함되어야 하므로 배포 시점에 로컬에 존재해야 합니다. `apiKey`는 비밀이 아니지만, Firestore 규칙과 도메인 화이트리스트로 남용을 억제합니다.
 
 ---
 
