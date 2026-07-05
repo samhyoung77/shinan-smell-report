@@ -27,10 +27,16 @@ const FOOTPRINTS = [
   { cx: 1479, cy: 345, length: 150, depth: 52, angle:  72 }, // 207
 ];
 
-// 개울 centerline(스펙 시작값 — QA 시각 튜닝 대상). 단지를 좌→하→우로 감쌈.
-const STREAM_PATH =
-  'M 40 -30 Q 110 280 235 510 Q 380 720 720 850 ' +
-  'Q 1060 955 1390 840 Q 1630 745 1710 480 Q 1780 250 1970 30';
+// 개울: 실제 지형과 같은 소문자 y자.
+//  · 본류(STREAM_MAIN): 우상단에서 우측 사면을 따라 내려와 단지 아래 합류점(~980,815)을
+//    지나 아래로 꼬리가 빠짐(y의 긴 획 + 내림꼬리).
+//  · 좌측 팔(STREAM_BRANCH): 좌상단에서 내려와 같은 합류점에서 본류와 만남(y의 짧은 획).
+const STREAM_MAIN =
+  'M 1980 180 C 1850 300 1710 440 1590 570 ' +
+  'C 1380 710 1170 785 980 815 ' +
+  'C 948 892 918 982 900 1075';
+const STREAM_BRANCH =
+  'M 20 -30 C 180 260 430 520 700 690 C 802 754 898 796 980 815';
 
 // 상단 문현로 얇은 띠 1개.
 const ROAD_PATH = 'M 0 95 Q 550 55 1000 120 T 2039 105';
@@ -60,13 +66,15 @@ function mapBackgroundSVG(W, H) {
     <path class="bg-road" d="${ROAD_PATH}" />
     <text class="bg-road-label" x="1000" y="72">문현로</text>
 
-    <!-- 개울 (핵심 강조): 굵은 물길 리본 + 밝은 하이라이트 라인 -->
-    <path class="bg-water" d="${STREAM_PATH}" />
-    <path class="bg-water-hi" d="${STREAM_PATH}" />
-    <!-- 흐름 방향 화살표 (좌하 → 하 → 우) -->
-    ${flowArrow(235, 510, 62)}
-    ${flowArrow(720, 850, 4)}
-    ${flowArrow(1390, 840, -22)}
+    <!-- 개울 (핵심 강조): Y자 물길 — 본류 + 아래 지류. 굵은 리본 + 밝은 하이라이트 -->
+    <path class="bg-water" d="${STREAM_MAIN}" />
+    <path class="bg-water" d="${STREAM_BRANCH}" />
+    <path class="bg-water-hi" d="${STREAM_MAIN}" />
+    <path class="bg-water-hi" d="${STREAM_BRANCH}" />
+    <!-- 흐름 방향 화살표 (좌·우 두 팔 → 합류점 → 아래 꼬리) -->
+    ${flowArrow(470, 545, 55)}
+    ${flowArrow(1520, 620, 148)}
+    ${flowArrow(935, 955, 100)}
     <text class="bg-water-label" x="300" y="640">개울</text>
 
     <!-- 건물 블록 -->
